@@ -57,19 +57,19 @@ public class Tariff06ReportCreator implements ReportCreator{
 	}
 	
 	public List<PhoneReport> createPhoneReports(List<CallInformation> callInfoList) {
-		Duration callBuffer = Duration.ofMinutes(300);
+		Duration callLimitBuffer = Duration.ofMinutes(300);
 		List<PhoneReport> phoneReportList = new ArrayList<>();
 		for(CallInformation callInfo : callInfoList) {
 			double price = 0;
 			long callSecondsDuration = callInfo.getCallDurationInSeconds();
-			if(callBuffer.minusSeconds(callSecondsDuration).isNegative()) {
-				callSecondsDuration -= callBuffer.toSeconds();
-				if(!callBuffer.isZero()) { 
-					callBuffer = Duration.ZERO;
+			if(callLimitBuffer.minusSeconds(callSecondsDuration).isNegative()) {
+				callSecondsDuration -= callLimitBuffer.toSeconds();
+				if(!callLimitBuffer.isZero()) { 
+					callLimitBuffer = Duration.ZERO;
 				}
 				price = Math.ceil(callSecondsDuration / 60.0) * MINUTE_COST;
 			} else {
-				callBuffer = callBuffer.minusSeconds(callSecondsDuration);
+				callLimitBuffer = callLimitBuffer.minusSeconds(callSecondsDuration);
 			}
 			phoneReportList.add(new PhoneReport(callInfo.getCallType(), callInfo.getStartCallingTime(),
 												callInfo.getEndCallingTime(), price));

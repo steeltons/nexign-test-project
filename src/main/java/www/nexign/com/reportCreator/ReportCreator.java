@@ -7,6 +7,12 @@ import java.util.List;
 import www.nexign.com.entity.CallInformation;
 import www.nexign.com.entity.PhoneReport;
 
+/**
+ * <h2>Report creator</h2>
+ * This interface specialized to create report files for specific tariff.
+ * @author Lakmilak1
+ *
+ */
 public interface ReportCreator {
 	
 	public final Comparator<PhoneReport> PHONE_REPORT_COMPARATOR = (pr1, pr2) -> {
@@ -16,5 +22,12 @@ public interface ReportCreator {
 		return pr1.getStartCallingTime().compareTo(pr2.getEndCallingTime());
 	};
 	
-	public void createReportFile(List<CallInformation> vendorList) throws IOException; 
+	/**
+	 * <h2>Create report file.</h2>
+	 * This method create report file for specific tariff.
+	 * @param callInfoList - list of phone calls.
+	 * @throws IOException throws if directory <b>reports</b> cannot be found and created or if error while 
+	 * writing file.
+	 */
+	public void createReportFile(List<CallInformation> callInfoList) throws IOException; 
 }

@@ -74,7 +74,7 @@ public class Tariff11ReportCreator implements ReportCreator{
 					if(!callLimitBuffer.isZero()) {
 						callLimitBuffer = Duration.ZERO;
 						price += (lastSeconds > 30) ? Math.ceil(lastSeconds / 60.0) * FIRST_MINUTES_COST : 0;
-						callSecondsDuration = (callSecondsDuration - lastSeconds >= 30) ? 0 
+						callSecondsDuration = (lastSeconds > 30 && callSecondsDuration  - lastSeconds < 30) ? 0 
 																					: callSecondsDuration - lastSeconds;
 					}
 					price += Math.ceil((callSecondsDuration - lastSeconds) / 60.0) * OTHER_MINUTES_COST;

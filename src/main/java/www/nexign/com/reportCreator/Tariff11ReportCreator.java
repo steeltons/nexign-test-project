@@ -70,14 +70,14 @@ public class Tariff11ReportCreator implements ReportCreator{
 			if(callInfo.getCallType() != 2) {
 				long callSecondsDuration = callInfo.getCallDurationInSeconds();
 				if(callLimitBuffer.minusSeconds(callSecondsDuration).isNegative()) {
-					long lastSeconds = callLimitBuffer.getSeconds();
 					if(!callLimitBuffer.isZero()) {
+						long lastSeconds = callLimitBuffer.getSeconds();
 						callLimitBuffer = Duration.ZERO;
 						price += (lastSeconds > 30) ? Math.ceil(lastSeconds / 60.0) * FIRST_MINUTES_COST : 0;
 						callSecondsDuration = (lastSeconds > 30 && callSecondsDuration  - lastSeconds < 30) ? 0 
 																					: callSecondsDuration - lastSeconds;
 					}
-					price += Math.ceil((callSecondsDuration - lastSeconds) / 60.0) * OTHER_MINUTES_COST;
+					price += Math.ceil(callSecondsDuration / 60.0) * OTHER_MINUTES_COST;
 				} else {
 					price = Math.ceil(callSecondsDuration / 60.0) * FIRST_MINUTES_COST;
 					callLimitBuffer = callLimitBuffer.minusSeconds(callSecondsDuration);

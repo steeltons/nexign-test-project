@@ -19,6 +19,7 @@ local.properties
 .classpath
 .settings/
 .loadpath
+/reports/
 
 # External tool builders
 .externalToolBuilders/

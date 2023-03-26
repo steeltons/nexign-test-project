@@ -9,8 +9,23 @@ import java.util.Scanner;
 
 import www.nexign.com.entity.CallInformation;
 
+/**
+ * <h2>Call Info parser</h2>
+ * This class created to parse input file with phone calls information.
+ * @author Lakmilak
+ *
+ */
 public class CallInfoParser {
 
+	/**
+	 * <h2>Parse phone calls file</h2>
+	 * This static method is converting phone call information line
+	 * from file to CallInformation object. Write in console line number
+	 * in file, if line cannot be parsed.
+	 * @param callInfoFile - file with information of calls.
+	 * @return List<CallInformation> - list of calls information.
+	 * @throws FileNotFoundException throws if file was not found.
+	 */
 	public static List<CallInformation> parseCallInfosFromFile(File callInfoFile) throws FileNotFoundException {
 		Scanner reader = new Scanner(callInfoFile);
 		List<CallInformation> callInfoList = new ArrayList<>();
@@ -37,6 +52,12 @@ public class CallInfoParser {
 		return callInfoList;
 	}
 	
+	/**
+	 * <h2>Date converter</h2>
+	 * This method convert date from String date.
+	 * @param date - line of format YYYYMMDDHH24MMSS
+	 * @return Date
+	 */
 	private static Date parseDate(String date) {
 		int year = Integer.parseInt(date.substring(0, 4)) - 1900;
 		int month = Integer.parseInt(date.substring(4, 6)) - 1;

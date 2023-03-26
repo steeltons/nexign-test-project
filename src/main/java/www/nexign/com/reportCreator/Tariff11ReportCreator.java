@@ -56,6 +56,12 @@ public class Tariff11ReportCreator implements ReportCreator{
 		writer.close();
 	}
 	
+	/*
+	 * Changed cost of call calculation. For example: User has 1m and 40s of calls for 0.5 rub / min
+	 * and he spoke about 2m, he will pay 1m and 40s for 1 rub (ceil minutes) and 0m for 1.5 rub (because he
+	 * spoke less than 30 seconds). However if he spoke about 2m and 10s, he will pay 1m and 40s for 1 rub and
+	 * 0m and 30s for 1.5 rub.
+	 */
 	public List<PhoneReport> createPhoneReports(List<CallInformation> callInfoList) {
 		Duration callLimitBuffer = Duration.ofMinutes(100);
 		List<PhoneReport> phoneReportList = new ArrayList<>();
@@ -67,8 +73,10 @@ public class Tariff11ReportCreator implements ReportCreator{
 					long lastSeconds = callLimitBuffer.getSeconds();
 					if(!callLimitBuffer.isZero()) {
 						callLimitBuffer = Duration.ZERO;
+						price += (lastSeconds > 30) ? Math.ceil(lastSeconds / 60.0) * FIRST_MINUTES_COST : 0;
+						callSecondsDuration = (callSecondsDuration - lastSeconds >= 30) ? 0 
+																					: callSecondsDuration - lastSeconds;
 					}
-					price += Math.ceil(lastSeconds / 60.0) * FIRST_MINUTES_COST;
 					price += Math.ceil((callSecondsDuration - lastSeconds) / 60.0) * OTHER_MINUTES_COST;
 				} else {
 					price = Math.ceil(callSecondsDuration / 60.0) * FIRST_MINUTES_COST;
